@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class NewWrite extends AppCompatActivity{
     MyDBHelper myhelper;
     SQLiteDatabase sqlDB;
-    Button but_save, but_delete;
+    Button but_save, but_delete, but_recovery;
     EditText edit_text_title, edit_text_contents;
     String sql;
     String mode;
@@ -30,6 +30,7 @@ public class NewWrite extends AppCompatActivity{
 
         myhelper = new MyDBHelper(this);
 
+        but_recovery = (Button)findViewById(R.id.button_save);
         but_save = (Button)findViewById(R.id.button_save);
         but_delete = (Button)findViewById(R.id.button_delete);
         edit_text_title = (EditText) findViewById(R.id.edit_text_title);
@@ -43,8 +44,10 @@ public class NewWrite extends AppCompatActivity{
         edit_text_contents.setText(contents);
 
         mode =  getIntent().getStringExtra("mode");
+
         if(mode != null) {
             but_delete.setVisibility(View.VISIBLE);
+            but_save.setText("수정");
         }
 
         but_delete.setOnClickListener(new View.OnClickListener() {
@@ -56,9 +59,7 @@ public class NewWrite extends AppCompatActivity{
                         sql = "update noteTable set type = 2 where _id = " + _id;
                     }
                     else {
-                        Log.d("asdf type2", type);
-                        Log.d("asdf id2", _id);
-                        sql = "delete from noteTable where _id = " + _id + "and type = 2";
+                        sql = "delete from noteTable where _id = " + _id + " and type = 2";
                     }
                     sqlDB.execSQL(sql);
                     sqlDB.close();
@@ -84,7 +85,13 @@ public class NewWrite extends AppCompatActivity{
 
                 sqlDB.execSQL(sql);
                 sqlDB.close();
-                Toast.makeText(NewWrite.this, "저장됨", Toast.LENGTH_LONG).show();
+                if(mode != null) {
+                    Toast.makeText(NewWrite.this, "수정됨", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(NewWrite.this, "저장됨", Toast.LENGTH_LONG).show();
+                }
+
                 finish();
             }
         });

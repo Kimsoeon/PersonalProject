@@ -51,7 +51,6 @@ public class WasteBasket extends AppCompatActivity {
                 intent.putExtra("title", title);
                 String contents = ((TextView) view.findViewById(R.id.contents)).getText().toString();
                 intent.putExtra("contents", contents);
-
                 startActivity(intent);
             }
         });
