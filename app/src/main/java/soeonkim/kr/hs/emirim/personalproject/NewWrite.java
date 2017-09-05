@@ -18,9 +18,10 @@ import android.widget.Toast;
 public class NewWrite extends AppCompatActivity{
     MyDBHelper myhelper;
     SQLiteDatabase sqlDB;
-    Button but_save;
+    Button but_save, but_delete;
     EditText edit_text_title, edit_text_contents;
     String sql;
+    String mode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class NewWrite extends AppCompatActivity{
         myhelper = new MyDBHelper(this);
 
         but_save = (Button)findViewById(R.id.button_save);
+        but_delete = (Button)findViewById(R.id.button_delete);
         edit_text_title = (EditText) findViewById(R.id.edit_text_title);
         edit_text_contents = (EditText) findViewById(R.id.edit_text_contents);
 
@@ -39,14 +41,33 @@ public class NewWrite extends AppCompatActivity{
         String contents = getIntent().getStringExtra("contents");
         edit_text_contents.setText(contents);
 
+        mode =  getIntent().getStringExtra("mode");
+        if(mode != null) {
+            but_delete.setVisibility(View.VISIBLE);
+        }
+
+        but_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqlDB = myhelper.getWritableDatabase();
+                if(mode != null) {
+                    sql = "update noteTable set type = 2 where _id = " + _id ;
+                    sqlDB.execSQL(sql);
+                    sqlDB.close();
+                    Toast.makeText(NewWrite.this, "삭제됨", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        });
 
         but_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sqlDB = myhelper.getWritableDatabase();
-                String mode = getIntent().getStringExtra("mode");
+
                 if(mode != null)
                 {
+
                     sql = "update noteTable set title = '" + edit_text_title.getText() + "', contents = '" +  edit_text_contents.getText() +  "' where _id = " + _id ;
                 }
                 else {
