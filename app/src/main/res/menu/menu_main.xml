@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="soeonkim.kr.hs.emirim.personalproject.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/waste_basket"
         android:orderInCategory="100"
         android:title="휴지통"
         app:showAsAction="never" />

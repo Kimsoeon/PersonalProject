@@ -36,6 +36,7 @@ public class NewWrite extends AppCompatActivity{
         edit_text_contents = (EditText) findViewById(R.id.edit_text_contents);
 
         final String _id = getIntent().getStringExtra("_id");
+        final String type = getIntent().getStringExtra("type");
         String title = getIntent().getStringExtra("title");
         edit_text_title.setText(title);
         String contents = getIntent().getStringExtra("contents");
@@ -50,8 +51,15 @@ public class NewWrite extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 sqlDB = myhelper.getWritableDatabase();
-                if(mode != null) {
-                    sql = "update noteTable set type = 2 where _id = " + _id ;
+                if(mode != null && type != null) {
+                    if(type.equals("1")) {
+                        sql = "update noteTable set type = 2 where _id = " + _id;
+                    }
+                    else {
+                        Log.d("asdf type2", type);
+                        Log.d("asdf id2", _id);
+                        sql = "delete from noteTable where _id = " + _id + "and type = 2";
+                    }
                     sqlDB.execSQL(sql);
                     sqlDB.close();
                     Toast.makeText(NewWrite.this, "삭제됨", Toast.LENGTH_LONG).show();
@@ -65,7 +73,7 @@ public class NewWrite extends AppCompatActivity{
             public void onClick(View v) {
                 sqlDB = myhelper.getWritableDatabase();
 
-                if(mode != null)
+                if(mode != null && type != null )
                 {
 
                     sql = "update noteTable set title = '" + edit_text_title.getText() + "', contents = '" +  edit_text_contents.getText() +  "' where _id = " + _id ;
